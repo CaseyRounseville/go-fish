@@ -14,7 +14,7 @@ void predefinedCards(){
     FILE *cardDeckFile;
     int cardNum;
     char suit[9];
-    cardDeckFile = fopen("/Users/nasseralhouti/desktop/cards.txt", "r");
+    cardDeckFile = fopen("cards.txt", "r");
     while(!feof(cardDeckFile)){
         fscanf(cardDeckFile, "%d %s",&cardNum, suit);
         printf("%d %s",cardNum , suit);

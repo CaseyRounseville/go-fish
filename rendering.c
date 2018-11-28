@@ -7,7 +7,7 @@
 // card size and display size constants
 #define CARD_WIDTH 9
 #define CARD_HEIGHT 7
-#define CARDS_PER_ROW 4
+#define CARDS_PER_ROW 13
 #define DISPLAY_WIDTH CARD_WIDTH * CARDS_PER_ROW
 
 // the values to print on the cards
@@ -97,4 +97,31 @@ void printDeckFancy(card *head) {
 
 	// blit the display to the console
 	blitDisplay(display, displayHeight);
+}
+
+void clearScreen(void) {
+	int success;
+
+	// windows command for clear screen is "cls"
+	// unix/linux/mac command for clear screen is "clear"
+	// try "cls" first, redirecting stderr to trash.txt, so
+	// that an error message will not be displayed if we are
+	// on unix/linux/mac
+	// we can't use /dev/null and nul because if we are on
+	// the wrong platform, it will produce an error message
+	success = system("cls 2> trash.txt") != -1;
+
+	// if "cls" failed, we are probably not on windows, so
+	// try "clear"
+	if (!success) {
+		success = system("clear 2> trash.txt");
+	}
+
+	// if "clear" failed, we might not be in an actual terminal,
+	// so fallback to printing a bunch of line feeds
+	if (!success) {
+		for (int i = 0; i < 200; i++) {
+			printf("\n");
+		}
+	}
 }

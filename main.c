@@ -13,6 +13,7 @@
 #include "cards.h"
 #include "player.h"
 #include "rendering.h"
+#include "input.h"
 void greetings(void);
 int main(int argc, const char * argv[]) {
 	// seed the random number generator
@@ -21,7 +22,7 @@ int main(int argc, const char * argv[]) {
     char userAns;
     greetings();
     printf("Would you like to shuffle the cards (y/n)");
-    scanf("%c",&userAns);
+    scanf("%c%*c",&userAns);
     if (userAns == 'y') {
         card *deck = newdeck();
         deck = shuffleDeck(deck);
@@ -36,6 +37,10 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < 1; i++) {
         printf("%s",print);
     }
+
+	printf("Press Enter to clear the screen...\n");
+	waitForUserToPressEnter();
+	clearScreen();
 
     return 0;
 }
