@@ -4,15 +4,20 @@
 #include "rendering.h"
 #include "cards.h"
 
+// card size and display size constants
 #define CARD_WIDTH 9
 #define CARD_HEIGHT 7
 #define CARDS_PER_ROW 4
 #define DISPLAY_WIDTH CARD_WIDTH * CARDS_PER_ROW
 
+// the values to print on the cards
+// 10 is a special case because it will take two chars
 char values[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K'};
 
-
+// render a card to a display
 void renderCard(char display[][DISPLAY_WIDTH], card *c, int startRow, int startCol);
+
+// print a display to the console
 void blitDisplay(char display[][DISPLAY_WIDTH], int displayHeight);
 
 void renderCard(char display[][DISPLAY_WIDTH], card *c, int startRow, int startCol) {
@@ -35,6 +40,8 @@ void renderCard(char display[][DISPLAY_WIDTH], card *c, int startRow, int startC
 	}
 
 	// render contents
+	// 10 is a special case because it will take two chars
+	// for symbols, this just prints the capitalized first letter of the card's suit
 	if (c->value == 10) {
 		display[startRow + 1][startCol + CARD_WIDTH - 3] = '1';
 		display[startRow + 1][startCol + CARD_WIDTH - 2] = '0';
