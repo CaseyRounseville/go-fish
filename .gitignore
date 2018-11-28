@@ -3,3 +3,4 @@
 *.sh
 labexam2.c
 renderingTestDriver.c
+buildGame.bat 

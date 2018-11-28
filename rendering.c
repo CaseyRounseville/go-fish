@@ -9,7 +9,6 @@
 #define CARDS_PER_ROW 4
 #define DISPLAY_WIDTH CARD_WIDTH * CARDS_PER_ROW
 
-char symbols[] = {'S', 'H', 'C', 'D'};
 char values[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K'};
 
 
@@ -36,10 +35,19 @@ void renderCard(char display[][DISPLAY_WIDTH], card *c, int startRow, int startC
 	}
 
 	// render contents
-	display[startRow + 1][startCol + CARD_WIDTH - 2] = values[c->value];//'A' + c->val;
-	display[startRow + 2][startCol + CARD_WIDTH - 2] = symbols[c->value % 4];
-	display[startRow + CARD_HEIGHT - 3][startCol + 1] = values[c->value];//'A' + c->val;
-	display[startRow + CARD_HEIGHT - 2][startCol + 1] = symbols[c->value % 4];
+	if (c->value == 10) {
+		display[startRow + 1][startCol + CARD_WIDTH - 3] = '1';
+		display[startRow + 1][startCol + CARD_WIDTH - 2] = '0';
+		display[startRow + 2][startCol + CARD_WIDTH - 2] = c->suit[0] - ('a' - 'A');
+		display[startRow + CARD_HEIGHT - 3][startCol + 1] = '1';
+		display[startRow + CARD_HEIGHT - 3][startCol + 2] = '0';
+		display[startRow + CARD_HEIGHT - 2][startCol + 1] = c->suit[0] - ('a' - 'A');
+	} else {
+		display[startRow + 1][startCol + CARD_WIDTH - 2] = values[c->value - 1];
+		display[startRow + 2][startCol + CARD_WIDTH - 2] = c->suit[0] - ('a' - 'A');
+		display[startRow + CARD_HEIGHT - 3][startCol + 1] = values[c->value - 1];
+		display[startRow + CARD_HEIGHT - 2][startCol + 1] = c->suit[0] - ('a' - 'A');
+	}
 }
 
 void blitDisplay(char display[][DISPLAY_WIDTH], int displayHeight) {
