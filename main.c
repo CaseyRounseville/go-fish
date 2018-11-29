@@ -28,7 +28,8 @@ int main(int argc, const char * argv[]) {
         deck = shuffleDeck(deck);
 		printDeckFancy(deck);
     }else{
-        predefinedCards();
+        card *deck = predefinedCards();
+		printDeckFancy(deck);
     }
     printf("Wilma has\n");
     char suits[100]=  "🖤";

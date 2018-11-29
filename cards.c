@@ -8,18 +8,38 @@
 
 #include <stdio.h>
 #include "cards.h"
+#include "stringUtil.h"
 #include <stdlib.h>
 #include <string.h>
-void predefinedCards(){
+card *predefinedCards(void){
     FILE *cardDeckFile;
     int cardNum;
     char suit[9];
     cardDeckFile = fopen("cards.txt", "r");
-    while(!feof(cardDeckFile)){
+
+	// read the first card
+    fscanf(cardDeckFile, "%d %s",&cardNum, suit);
+	trimTrailingWhiteSpace(suit);
+	card *head = newcard(suit, cardNum);
+	
+	card *currCard = head;
+
+	for (int i = 0; i < 51; i++) {
         fscanf(cardDeckFile, "%d %s",&cardNum, suit);
+		trimTrailingWhiteSpace(suit);
         printf("%d %s",cardNum , suit);
+
+		currCard->next = newcard(suit, cardNum);
+		currCard = currCard->next;
+
         printf("\n");
     }
+
+	// close the file
+	fclose(cardDeckFile);
+
+	// return a pointer to the first card in the deck
+	return head;
 }
 card *newdeck(void){
     card *cardList;

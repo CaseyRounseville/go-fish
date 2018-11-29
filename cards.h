@@ -30,7 +30,7 @@ void printCard(card *c);
 void printDeck(card *c);
 void freeDeck(card *head); // points to the first card and recursively frees all the cards in the deck
 void appendCard(card *head, card*c);
-void predefinedCards(void);
+card *predefinedCards(void);
 void appendCard(card *head , card *c); // points to a card that was alraedy created
 // return a the value of the pointer
 void shuffle(card *firstCard);
