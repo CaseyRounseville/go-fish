@@ -5,6 +5,8 @@
 
 void printDeckFancy(card *c);
 
+void printBooksFancy(card *c);
+
 void clearScreen(void);
 
 #endif

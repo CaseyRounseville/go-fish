@@ -16,6 +16,7 @@ struct game {
     int numberOfPlayers;
     player *currentPlayer;
     card *deckOfCards;
+	int numBooksTotal;
 };
 
 game *newGame(card *deckOfCards);
@@ -24,4 +25,6 @@ int computerMove(game *g, player *p);
 int playerTurn(game *g, player *p);
 void deckOfCards(game *g);
 void checkIfWinner(game *g, char result[]);
+void endOfGameResults(game *g, char result[]);
+void credits();
 #endif /* game_h */

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "game.h"
 #include "cards.h"
 #include "player.h"
@@ -58,8 +59,13 @@ int main(int argc, const char * argv[]) {
 	char result[100];
 	playGame(g, result);
 
-	// print out the winners
-	// TODO: print winners
+	// alert everyone that the game has just ended, and print the winners
+	endOfGameResults(g, result);
+	clearScreen();
+
+	// display the credits
+	credits();
+	clearScreen();
 
     return 0;
 }
