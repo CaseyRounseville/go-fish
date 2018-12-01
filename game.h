@@ -26,5 +26,5 @@ int playerTurn(game *g, player *p);
 void deckOfCards(game *g);
 void checkIfWinner(game *g, char result[]);
 void endOfGameResults(game *g, char result[]);
-void credits();
+void credits(void);
 #endif /* game_h */

@@ -616,7 +616,7 @@ void endOfGameResults(game *g, char result[]) {
 	waitForUserToPressEnter("Press enter to continue.\n");
 }
 
-void credits() {
+void credits(void) {
 	printf("Thank you for playing.\n");
 	printf("\n");
 
