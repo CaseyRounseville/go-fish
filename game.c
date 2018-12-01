@@ -588,7 +588,7 @@ void endOfGameResults(game *g, char result[]) {
 		waitForUserToPressEnter("Press enter to continue.\n");
 		clearScreen();
 
-		printf("It appears there is a %d-way tie.\n", strlen(result));
+		printf("It appears there is a %d-way tie.\n", (int)strlen(result));
 		printf("\n");
 		waitForUserToPressEnter("Press enter to continue.\n");
 		clearScreen();
