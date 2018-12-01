@@ -18,7 +18,7 @@
 void greetings(void);
 int main(int argc, const char * argv[]) {
 	// seed the random number generator
-	srand(time(NULL));
+	srand((int)time(NULL));
 
     char userAns;
     greetings();
