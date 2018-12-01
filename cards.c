@@ -78,6 +78,18 @@ card *removeCard(card *head, card *cardToBeRemoved){
     currentCard->next = NULL;
     return head;
 }
+
+card *findCardByValue(card *firstCard, int value) {
+	card *currCard = firstCard;
+	while (currCard) {
+		if (currCard->value == value) {
+			return currCard;
+		}
+		currCard = currCard->next;
+	}
+	return NULL;
+}
+
 card *shuffleDeck(card *firstUnshuffledCard){
     card *newHead = getCard(firstUnshuffledCard,rand()%52);// second argument is the random index
     firstUnshuffledCard = removeCard(firstUnshuffledCard , newHead);

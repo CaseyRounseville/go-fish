@@ -20,6 +20,7 @@ struct card{
 card *newcard(char suit[7] , int value);
 card *newdeck(void);
 card *removeCard(card *firstUnshuffledCard , card *newHead);
+card *findCardByValue(card *firstCard, int value);// find the first occurrance of a card in a deck that has the specified value
 card *getLastCard(card *head);
 card *laoddeck(FILE *filename); // loads a predefined deck
 card *getCard(card *head,int index);

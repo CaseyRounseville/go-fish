@@ -23,12 +23,13 @@ int main(int argc, const char * argv[]) {
     greetings();
     printf("Would you like to shuffle the cards (y/n)");
     scanf("%c%*c",&userAns);
+	card *deck;
     if (userAns == 'y') {
-        card *deck = newdeck();
+        deck = newdeck();
         deck = shuffleDeck(deck);
 		printDeckFancy(deck);
     }else{
-        card *deck = predefinedCards();
+        deck = predefinedCards();
 		printDeckFancy(deck);
     }
     printf("Wilma has\n");
@@ -39,9 +40,26 @@ int main(int argc, const char * argv[]) {
         printf("%s",print);
     }
 
-	printf("Press Enter to clear the screen...\n");
-	waitForUserToPressEnter();
+	// pause
+	waitForUserToPressEnter("Press Enter to clear the screen...\n");
 	clearScreen();
+
+	// create a new game instance
+	game *g = newGame(deck);
+
+	// set up the players
+	setUpPlayers(g);
+
+	// pause
+	waitForUserToPressEnter("Press Enter to clear the screen...\n");
+	clearScreen();
+
+	// start the game
+	char result[100];
+	playGame(g, result);
+
+	// print out the winners
+	// TODO: print winners
 
     return 0;
 }

@@ -7,9 +7,20 @@
 //
 #ifndef player_h
 #define player_h
+
 #include "cards.h"
-typedef struct{
+
+typedef struct player player;
+struct player {
+	char name[100];
+	int isHuman;
     card *firstCard;
-}player;
+	card *firstCardOfFirstBook;
+};
+
+typedef struct game game;
+void setUpPlayers(game *g);
+
+void freePlayers(game *g);
 
 #endif /* player_h */
