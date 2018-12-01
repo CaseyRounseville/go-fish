@@ -24,6 +24,7 @@ void printHands(game *g);
 player *getPlayerByName(game *g, char name[]);
 
 game *newGame(card *deckOfCards) {
+    //
 	game *g = (game *)malloc(sizeof(game));
 	g->deckOfCards = deckOfCards;
 	return g;
@@ -45,6 +46,7 @@ void playGame(game *g, char result[]) {
 
 	// game loop
 	int currPlayerIndex = 0;
+    printf("%s",result);
 	while (strcmp(result, "") == 0) {
 		// get a pointer to the current player
 		player *currPlayer = g->player + currPlayerIndex;
@@ -64,7 +66,7 @@ void playGame(game *g, char result[]) {
 		checkIfWinner(g, result);
 	}
 }
-
+ // cards in the table
 int computerMove(game *g, player *p) {
 	printf("It is %s's(automated) turn.\n", p->name);
 
@@ -167,6 +169,7 @@ int playerTurn(game *g, player *p) {
 	// print the player's cards, if they have any
 	if (p->firstCard) {
 		printf("This is your hand:\n");
+        // Ascii art 
 		printDeckFancy(p->firstCard);
 	} else {
 		printf("You do not have any cards in your hand.\n");
@@ -303,10 +306,11 @@ void checkIfWinner(game *g, char result[]) {
 void dealCards(game *g) {
 	// deal each player 7 cards
 	for (player *p = g->player; p < g->player + g->numberOfPlayers; p++) {
-		for (int i = 0; i < 7; i++) {
+        
+        for (int i = 0; i < (g->numberOfPlayers >3 ? 5 : 7); i++) {
 			// get a pointer to the first card in the deck(the head)
 			card *c = g->deckOfCards;
-
+            
 			// remove the card from the deck
 			// head must be reassigned, because it won't be the head anymore
 			// after it is removed
@@ -355,3 +359,4 @@ player *getPlayerByName(game *g, char name[]) {
 
 	return NULL;
 }
+
