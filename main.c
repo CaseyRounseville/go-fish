@@ -67,6 +67,9 @@ int main(int argc, const char * argv[]) {
 	credits();
 	clearScreen();
 
+	// free the memory used by the game, players, and cards
+	freeGame(g);
+
     return 0;
 }
 void greetings(){

@@ -787,7 +787,7 @@ void endOfGameResults(game *g, char result[]) {
 		clearScreen();
 
 		for (int i = 0; i < strlen(result); i++) {
-			printf("Player %d:%-20s(%s): %d\n", result[i] + 1 - '0', g->player[i].name, g->player[i].isHuman ? "human" : "automated", deckSize(g->player[i].firstCardOfFirstBook));
+			printf("Player %d:%-20s(%s): %d\n", result[i] + 1 - '0', g->player[result[i] - '0'].name, g->player[result[i] - '0'].isHuman ? "human" : "automated", deckSize(g->player[result[i] - '0'].firstCardOfFirstBook));
 		}
 	} else {
 		printf("Player %d:%-20s(%s): %d\n", result[0] + 1 - '0', g->player[result[0] - '0'].name, g->player[result[0] - '0'].isHuman ? "human" : "automated", deckSize(g->player[0].firstCardOfFirstBook));
@@ -820,4 +820,33 @@ void credits(void) {
 	printf("\n");
 
 	waitForUserToPressEnter("Press enter to exit program.\n");
+}
+
+void freeGame(game *g) {
+	// free all of the cards held by the players
+	// this includes hands and books
+	// their hand should be empty by now, but we
+	// check anyway just to be safe
+	for (int i = 0; i < g->numberOfPlayers; i++) {
+		if (g->player[i].firstCard) {
+			freeDeck(g->player[i].firstCard);
+		}
+		if (g->player[i].firstCardOfFirstBook) {
+			freeDeck(g->player[i].firstCardOfFirstBook);
+		}
+	}
+
+	// free the dynamically allocated array of players
+	// this is NOT a linked list
+	free(g->player);
+	
+	// free the cards on the table
+	// there shouldn't be any cards left on the table,
+	// but we check anyway just to be safe
+	if (g->deckOfCards) {
+		freeDeck(g->deckOfCards);
+	}
+
+	// free the game
+	free(g);
 }

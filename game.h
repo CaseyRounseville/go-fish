@@ -27,4 +27,5 @@ void deckOfCards(game *g);
 void checkIfWinner(game *g, char result[]);
 void endOfGameResults(game *g, char result[]);
 void credits(void);
+void freeGame(game *g);
 #endif /* game_h */

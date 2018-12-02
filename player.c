@@ -101,10 +101,6 @@ void setUpPlayers(game *g) {
 	}
 }
 
-void freePlayers(game *g) {
-	free(g->player);
-}
-
 int nameIsTaken(player *firstPlayer, int numPlayers, char name[]) {
 	for (player *currentPlayer = firstPlayer; currentPlayer < firstPlayer + numPlayers; currentPlayer++) {
 		if (strcmp(currentPlayer->name, name) == 0) {

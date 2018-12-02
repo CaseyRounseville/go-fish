@@ -21,6 +21,5 @@ struct player {
 typedef struct game game;
 void setUpPlayers(game *g);
 
-void freePlayers(game *g);
 void moveCardsFromHandToBook(player *player);
 #endif /* player_h */
