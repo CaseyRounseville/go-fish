@@ -134,6 +134,50 @@ int computerMove(game *g, player *p) {
 			printf("Here is the updated list of %s's books:\n", p->name);
 			printf("\n");
 			printBooksFancy(p->firstCardOfFirstBook);
+
+			// pick up more cards if getting a book caused the hand to be empty
+			if (!p->firstCard) {
+				if (g->deckOfCards) {
+					// figure out how many cards to pick up
+					int numCardsToPickUp;
+					if (g->numberOfPlayers > 3) {
+						numCardsToPickUp = deckSize(g->deckOfCards) > 4 ? 5 : deckSize(g->deckOfCards);
+					} else {
+						numCardsToPickUp = deckSize(g->deckOfCards) > 6 ? 7 : deckSize(g->deckOfCards);
+					}
+
+					// pick up the cards
+					card * cardToPickUp = getCard(g->deckOfCards, 0);
+					g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+					cardToPickUp->prev = NULL;
+					cardToPickUp->next = NULL;
+					p->firstCard = cardToPickUp;
+
+					for (int i = 1; i < numCardsToPickUp; i++) {
+						card * cardToPickUp = getCard(g->deckOfCards, 0);
+						g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+						cardToPickUp->prev = NULL;
+						cardToPickUp->next = NULL;
+						appendCard(p->firstCard, cardToPickUp);
+					}
+
+					int numBooksBeforeMove = deckSize(p->firstCardOfFirstBook) / 4;
+					moveCardsFromHandToBook(p);
+					int numBooksAfterMove = deckSize(p->firstCardOfFirstBook) / 4;
+					if (numBooksAfterMove > numBooksBeforeMove) {
+						g->numBooksTotal++;
+						printf("%s just got a book from taking cards from the table.\n", p->name);
+						printf("\n");
+
+						printf("Here is the updated list of %s's books:\n", p->name);
+						printBooksFancy(p->firstCardOfFirstBook);
+						printf("\n");
+					}
+				} else {
+					printf("Uh-oh. %s is out of luck.\n", p->name);
+					printf("There aren't any cards on the table.\n");
+				}
+			}
 		} else {
 			printf("There is no change in %s's books.\n", p->name);
 		}
@@ -177,11 +221,11 @@ int computerMove(game *g, player *p) {
 			int numBooksBeforeMove = deckSize(p->firstCardOfFirstBook) / 4;
 			moveCardsFromHandToBook(p);
 			int numBooksAfterMove = deckSize(p->firstCardOfFirstBook) / 4;
-			if (numBooksAfterMove > numBooksBeforeMove) {	
+			if (numBooksAfterMove > numBooksBeforeMove) {
 				// increment total number of books
 				g->numBooksTotal++;
 
-				printf("%s just got a book.\n", p->name);
+				printf("%s just got a book from going fishing.\n", p->name);
 				printf("\n");
 				printf("Here is the updated list of %s's books:\n", p->name);
 				printf("\n");
@@ -196,6 +240,51 @@ int computerMove(game *g, player *p) {
 				printDeckFancy(p->firstCard);
 			} else {
 				printf("%s's hand is now empty.\n", p->name);
+				int numCardsToPickUp = deckSize(g->deckOfCards) > 4 ? 5 : deckSize(g->deckOfCards);
+				printf("%s will take %d cards from the table.\n", p->name, numCardsToPickUp);
+
+				if (deckSize(g->deckOfCards) == 0) {
+					printf("Uh-oh. %s are out of luck.\n", p->name);
+					printf("There aren't any cards on the table.\n");
+				} else {
+					if (deckSize(g->deckOfCards) < numCardsToPickUp) {
+						printf("Uh-oh. There only %d cards on the table.\n", deckSize(g->deckOfCards));
+						printf("Instead of picking up %d cards, %s will only pick up %d cards.\n", numCardsToPickUp, p->name, deckSize(g->deckOfCards));
+					}
+					
+					card *cardToPickUp = getCard(g->deckOfCards, 0);
+					g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+					cardToPickUp->prev = NULL;
+					cardToPickUp->next = NULL;
+					p->firstCard = cardToPickUp;
+
+					for (int i = 1; i < numCardsToPickUp; i++) {
+						card *cardToPickUp = getCard(g->deckOfCards, 0);
+						g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+						cardToPickUp->prev = NULL;
+						cardToPickUp->next = NULL;
+						appendCard(p->firstCard, cardToPickUp);
+					}
+
+					printf("Here is %s's new hand after picking up more cards:\n", p->name);
+					printDeckFancy(p->firstCard);
+					printf("\n");
+
+					int numBooksBeforeMove = deckSize(p->firstCardOfFirstBook) / 4;
+					moveCardsFromHandToBook(p);
+					int numBooksAfterMove = deckSize(p->firstCardOfFirstBook) / 4;
+					if (numBooksAfterMove > numBooksBeforeMove) {
+						// increment total number of books
+						g->numBooksTotal++;
+
+						printf("%s just got a book from picking up more cards.\n", p->name);
+						printf("Here is an updated list of %s's books:\n", p->name);
+						printBooksFancy(p->firstCardOfFirstBook);
+					} else {
+						printf("%s's books did not change after picking up more cards.\n", p->name);
+					}
+					printf("\n");
+				}
 			}
 			printf("\n");
 
@@ -345,6 +434,51 @@ int playerTurn(game *g, player *p) {
 			printf("Here is the updated list of your books:\n");
 			printf("\n");
 			printBooksFancy(p->firstCardOfFirstBook);
+
+			// pick up more cards if getting a book caused the hand to be empty
+			if (!p->firstCard) {
+				if (g->deckOfCards) {
+					// figure out how many cards to pick up
+					int numCardsToPickUp;
+					if (g->numberOfPlayers > 3) {	
+						numCardsToPickUp = deckSize(g->deckOfCards) > 4 ? 5 : deckSize(g->deckOfCards);
+					} else {
+						numCardsToPickUp = deckSize(g->deckOfCards) > 6 ? 7 : deckSize(g->deckOfCards);
+					}
+
+					// pick up the cards
+					card * cardToPickUp = getCard(g->deckOfCards, 0);
+					g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+					cardToPickUp->prev = NULL;
+					cardToPickUp->next = NULL;
+					p->firstCard = cardToPickUp;
+
+					for (int i = 1; i < numCardsToPickUp; i++) {
+						card * cardToPickUp = getCard(g->deckOfCards, 0);
+						g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+						cardToPickUp->prev = NULL;
+						cardToPickUp->next = NULL;
+						appendCard(p->firstCard, cardToPickUp);
+					}
+
+					int numBooksBeforeMove = deckSize(p->firstCardOfFirstBook) / 4;
+					moveCardsFromHandToBook(p);
+					int numBooksAfterMove = deckSize(p->firstCardOfFirstBook) / 4;
+
+					if (numBooksAfterMove > numBooksBeforeMove) {
+						g->numBooksTotal++;
+						printf("You just got a book from taking cards from the table.\n");
+						printf("\n");
+
+						printf("Here is the updated list of your books:\n");
+						printBooksFancy(p->firstCardOfFirstBook);
+						printf("\n");
+					}
+				} else {
+					printf("Uh-oh. You is out of luck.\n");
+					printf("There aren't any cards on the table.\n");
+				}
+			}
 		} else {
 			printf("There is no change in your books.\n");
 		}
@@ -391,7 +525,7 @@ int playerTurn(game *g, player *p) {
 				// increment the total number of books
 				g->numBooksTotal++;
 
-				printf("You just got a book.\n");
+				printf("You just got a book from going fishing.\n");
 				printf("\n");
 				printf("Here is an updated list of your books:\n");
 				printf("\n");
@@ -406,6 +540,51 @@ int playerTurn(game *g, player *p) {
 				printDeckFancy(p->firstCard);
 			} else {
 				printf("Your hand is now empty.\n");
+				int numCardsToPickUp = deckSize(g->deckOfCards) > 4 ? 5 : deckSize(g->deckOfCards);
+				printf("You will take %d cards from the table.\n", numCardsToPickUp);
+
+				if (deckSize(g->deckOfCards) == 0) {
+					printf("Uh-oh. You are out of luck.\n");
+					printf("There aren't any cards on the table.\n");
+				} else {
+					if (deckSize(g->deckOfCards) < numCardsToPickUp) {
+						printf("Uh-oh. There only %d cards on the table.\n", deckSize(g->deckOfCards));
+						printf("Instead of picking up %d cards, you will only pick up %d cards.\n", numCardsToPickUp, deckSize(g->deckOfCards));
+					}
+					
+					card *cardToPickUp = getCard(g->deckOfCards, 0);
+					g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+					cardToPickUp->prev = NULL;
+					cardToPickUp->next = NULL;
+					p->firstCard = cardToPickUp;
+
+					for (int i = 1; i < numCardsToPickUp; i++) {
+						card *cardToPickUp = getCard(g->deckOfCards, 0);
+						g->deckOfCards = removeCard(g->deckOfCards, cardToPickUp);
+						cardToPickUp->prev = NULL;
+						cardToPickUp->next = NULL;
+						appendCard(p->firstCard, cardToPickUp);
+					}
+
+					printf("Here is your new hand after picking up more cards:\n");
+					printDeckFancy(p->firstCard);
+					printf("\n");
+
+					int numBooksBeforeMove = deckSize(p->firstCardOfFirstBook) / 4;
+					moveCardsFromHandToBook(p);
+					int numBooksAfterMove = deckSize(p->firstCardOfFirstBook) / 4;
+					if (numBooksAfterMove > numBooksBeforeMove) {
+						// increment total number of books
+						g->numBooksTotal++;
+
+						printf("You just got a book from picking up more cards.\n");
+						printf("Here is an updated list of your books:\n");
+						printBooksFancy(p->firstCardOfFirstBook);
+					} else {
+						printf("Your books did not change after picking up more cards.\n");
+					}
+					printf("\n");
+				}
 			}
 			printf("\n");
 
@@ -457,6 +636,7 @@ void checkIfWinner(game *g, char result[]) {
 	strcpy(result, "");
 	int maxBooks = 0;
 	
+	// finds the max of the players' number of books
 	for (player *p = g->player; p < g->player + g->numberOfPlayers; p++) {
 		int numBooks = deckSize(p->firstCardOfFirstBook) / 4;
 		if (numBooks > maxBooks) {
@@ -475,6 +655,7 @@ void checkIfWinner(game *g, char result[]) {
 			sprintf(temp, "%c", '0' + playerIndex);
 			strcat(result, temp);
 		}
+		playerIndex++;
 	}
 }
 
@@ -531,6 +712,13 @@ void printHands(game *g) {
 		player *p = g->player + i;
 		printf("Player %d(%s), this is your hand:\n", i + 1, p->name);
 		printDeckFancy(p->firstCard);
+		printf("\n");
+		if (p->firstCardOfFirstBook) {
+			printf("And these are your books:\n");
+			printBooksFancy(p->firstCardOfFirstBook);
+		} else {
+			printf("And you do not have any books.\n");
+		}
 		printf("\n");
 	}
 }
@@ -596,14 +784,18 @@ void endOfGameResults(game *g, char result[]) {
 		printf("And the winners are...\n");
 		printf("\n");
 		waitForUserToPressEnter("Press enter to continue.\n");
+		clearScreen();
 
 		for (int i = 0; i < strlen(result); i++) {
-			printf("Player %d:%-20s(%s)\n", result[i] + 1 - '0', g->player[i].name, g->player[i].isHuman ? "human" : "automated");
+			printf("Player %d:%-20s(%s): %d\n", result[i] + 1 - '0', g->player[i].name, g->player[i].isHuman ? "human" : "automated", deckSize(g->player[i].firstCardOfFirstBook));
 		}
 	} else {
-		printf("Player %d:%-20s(%s)\n", result[0] + 1 - '0', g->player[result[0] - '0'].name, g->player[result[0] - '0'].isHuman ? "human" : "automated");
+		printf("Player %d:%-20s(%s): %d\n", result[0] + 1 - '0', g->player[result[0] - '0'].name, g->player[result[0] - '0'].isHuman ? "human" : "automated", deckSize(g->player[0].firstCardOfFirstBook));
 	}
 	printf("\n");
+
+	waitForUserToPressEnter("Press enter to continue.\n");
+	clearScreen();
 
 	// print out everyone's books to make sure the result is correct
 	printf("Final scores:\n");
